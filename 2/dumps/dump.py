@@ -41,3 +41,52 @@ for i,p_label in enumerate(predicted_labels):
         correct+=1
 print("Accuracy: ", correct*100.0/len(test_data))
 '''
+
+'''
+from matplotlib.patches import Ellipse
+
+def draw_ellipse(position, covariance, ax=None, **kwargs):
+    """Draw an ellipse with a given position and covariance"""
+    ax = ax or plt.gca()
+    
+    # Convert covariance to principal axes
+    if covariance.shape == (2, 2):
+        U, s, Vt = np.linalg.svd(covariance)
+        angle = np.degrees(np.arctan2(U[1, 0], U[0, 0]))
+        width, height = 2 * np.sqrt(s)
+    else:
+        angle = 0
+        width, height = 2 * np.sqrt(covariance)
+    
+    # Draw the Ellipse
+    for nsig in range(1, 4):
+        ax.add_patch(Ellipse(position, nsig * width, nsig * height,
+                             angle, **kwargs))
+        
+def plot_gmm(data,mus,sigmas,r,labels,label=True, ax=None):
+    ax = ax or plt.gca()
+    labels = predict(data,mus,sigmas,2)
+    if label:
+        ax.scatter(data[:, 0], data[:, 1], c=labels, s=40, cmap='viridis', zorder=2)
+    else:
+        ax.scatter(data[:, 0], data[:, 1], s=40, zorder=2)
+    ax.axis('equal')
+    
+    w_factor = 0.2 / r.max()
+    for pos, covar, w in zip(mus, sigmas, r):
+        draw_ellipse(pos, covar)
+
+plot_gmm(data[:,:2],mus,sigmas,r,data[:,2])
+plt.show()
+'''
+
+'''
+def euclidian_distance(train_data,point):
+    point = np.array(point)
+    differences = train_data - np.ones([len(train_data),point.shape[1]]) * point
+    distances = np.sqrt(np.power(differences,2))
+    return np.sort(distances)
+def predict(train_data,point,k):
+    pass
+print( euclidian_distance( training_data[:,:2] , [1,2]))
+'''
